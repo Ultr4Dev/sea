@@ -35,7 +35,7 @@ The Sea API is a free solution for storing and retrieving JSON data. It is desig
     tags=["default"],
 )
 def read_root():
-    return fastapi.responses.RedirectResponse("/redoc")
+    return fastapi.responses.RedirectResponse("/docs")
 
 
 if __name__ == "__main__":
