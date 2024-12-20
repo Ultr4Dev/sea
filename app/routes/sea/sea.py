@@ -20,7 +20,7 @@ def create_sea(sea: models.SeaCreate) -> models.Sea:
     db.session.add(db_sea)
     db.session.commit()
 
-    return sea
+    return db_sea
 
 
 @router.get("/{sea_id}", tags=["sea"])
