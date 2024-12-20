@@ -27,7 +27,7 @@ class Sea(Base):
     __tablename__ = "sea"
 
     id = mapped_column(
-        String, primary_key=True, default_factory=random_string(16, "Sea-")
+        String, primary_key=True, insert_default=random_string(16, "Sea-")
     )
     name = mapped_column(String)
     description = mapped_column(String)
@@ -49,7 +49,7 @@ class Fish(Base):
     __tablename__ = "fish"
 
     id = mapped_column(
-        String, primary_key=True, default_factory=random_string(16, "Fish-")
+        String, primary_key=True, insert_default=random_string(16, "Fish-")
     )
     name = mapped_column(String)
     description = mapped_column(String)
