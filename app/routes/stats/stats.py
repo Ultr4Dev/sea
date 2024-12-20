@@ -1,5 +1,4 @@
-import fastapi
-import database
+import app.database as database
 from fastapi import APIRouter
 
 """

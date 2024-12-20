@@ -1,14 +1,12 @@
-from typing import Dict, List
-from typing import Optional
+import os
 from sqlalchemy import JSON, ForeignKey, create_engine
 from sqlalchemy import String
 from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Session
 
-from utils import random_string
+from app.utils import random_string
 
 
 class Base(DeclarativeBase):
@@ -58,7 +56,6 @@ class Fish(Base):
 
 # Stats
 
-
-engine = create_engine("sqlite:///db.db", echo=True)
+engine = create_engine(os.environ.get("DATABASE_URL", "sqlite:///db.db"), echo=True)
 Base.metadata.create_all(engine, tables=[Sea.__table__, Fish.__table__])
 session = Session(engine)

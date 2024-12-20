@@ -1,6 +1,6 @@
 import fastapi
-import database
-from routes.fish import models
+import app.database as database
+from app.routes.fish import models
 from fastapi import APIRouter
 
 """

@@ -1,9 +1,4 @@
-from calendar import c
-from tkinter import N
-from uuid import uuid4
-from pydantic import UUID4, BaseModel, Field
-
-from utils import random_string
+from pydantic import BaseModel
 
 
 class Stats(BaseModel):

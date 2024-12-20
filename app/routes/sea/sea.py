@@ -1,9 +1,9 @@
 import fastapi
-import database
-from routes.sea import models
+import app.database as database
+from app.routes.sea import models
 from fastapi import APIRouter
 
-from routes.fish import fish
+from app.routes.fish import fish
 
 """
     Sea (location of fish(data))
