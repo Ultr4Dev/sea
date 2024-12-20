@@ -18,9 +18,9 @@ db = database
 db.Base.metadata.drop_all(db.engine)  # Drop all tables if they exist
 db.Base.metadata.create_all(db.engine)  # Recreate tables
 app.servers = [{"url": environ.get("COOLIFY_URL", "http://localhost:8994")}]
-app.include_router(prefix="/V1", router=sea.router, tags=[], responses=responses)
+app.include_router(prefix="/v1", router=sea.router, tags=[], responses=responses)
 app.include_router(stats.router, tags=[], responses=responses)
-app.include_router(admin.router, responses=responses)
+# app.include_router(admin.router, responses=responses)
 app.router.tags = []
 app.title = "Plenty Of Fish In The Sea"
 app.description = """
