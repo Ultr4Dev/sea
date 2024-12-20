@@ -26,7 +26,9 @@ class Sea(Base):
 
     __tablename__ = "sea"
 
-    id = mapped_column(String, primary_key=True, default=f"Sea-{random_string(16)}")
+    id = mapped_column(
+        String, primary_key=True, default_factory=random_string(16, "Sea-")
+    )
     name = mapped_column(String)
     description = mapped_column(String)
     fish = relationship("Fish", back_populates="sea")
@@ -46,7 +48,9 @@ class Fish(Base):
 
     __tablename__ = "fish"
 
-    id = mapped_column(String, primary_key=True, default=f"Fish-{random_string(16)}")
+    id = mapped_column(
+        String, primary_key=True, default_factory=random_string(16, "Fish-")
+    )
     name = mapped_column(String)
     description = mapped_column(String)
     data = mapped_column(JSON(True))
