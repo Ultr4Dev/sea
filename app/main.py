@@ -30,10 +30,7 @@ The Sea API is a free solution for storing and retrieving JSON data. It is desig
 """
 
 
-@app.get(
-    "/",
-    tags=["default"],
-)
+@app.get("/", tags=["default"], include_in_schema=False)
 def read_root():
     return fastapi.responses.RedirectResponse("/docs")
 
