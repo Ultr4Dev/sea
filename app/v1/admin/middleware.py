@@ -1,7 +1,7 @@
 import time
 
 import fastapi
-import app.database as database
+import app.v1.database as database
 from fastapi import APIRouter, FastAPI, Request
 
 db = database

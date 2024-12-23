@@ -1,7 +1,7 @@
 import os
 from sqlalchemy import JSON, ForeignKey, create_engine, String
 from sqlalchemy.orm import DeclarativeBase, mapped_column, relationship, Session
-from app.utils import random_string
+from app.v1.utils import random_string
 
 
 class Base(DeclarativeBase):
@@ -19,7 +19,7 @@ class Sea(Base):
         fish (List[Fish]): A list of fish that live in the sea.
     """
 
-    __tablename__ = "sea"
+    __tablename__ = "sea_v1"
 
     # Use default=lambda: to generate a new ID at runtime
     id = mapped_column(
@@ -29,7 +29,7 @@ class Sea(Base):
     )
     name = mapped_column(String)
     description = mapped_column(String)
-    fish = relationship("Fish", back_populates="sea")
+    fish = relationship("Fish", back_populates="sea_v1")
 
 
 class Fish(Base):
@@ -45,7 +45,7 @@ class Fish(Base):
         sea (Sea): The sea where the fish lives.
     """
 
-    __tablename__ = "fish"
+    __tablename__ = "fish_v1"
 
     id = mapped_column(
         String,
@@ -55,8 +55,8 @@ class Fish(Base):
     name = mapped_column(String)
     description = mapped_column(String)
     data = mapped_column(JSON)
-    sea_id = mapped_column(String, ForeignKey("sea.id"))
-    sea = relationship("Sea", back_populates="fish")
+    sea_id = mapped_column(String, ForeignKey("sea_v1.id"))
+    sea = relationship("Sea", back_populates="fish_v1")
 
 
 # Stats

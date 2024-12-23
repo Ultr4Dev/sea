@@ -1,12 +1,12 @@
 import fastapi
-import app.database as database
-from app.routes.fish import models
+import app.v1.database as database
+from app.v1.routes.fish import models
 from fastapi import APIRouter
 
 """
     Fish (data)
 """
-router = APIRouter(tags=["fish"])
+router = APIRouter(tags=["v1"])
 db = database
 
 
