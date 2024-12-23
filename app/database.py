@@ -1,11 +1,6 @@
 import os
-from sqlalchemy import JSON, ForeignKey, create_engine
-from sqlalchemy import String
-from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy.orm import mapped_column
-from sqlalchemy.orm import relationship
-from sqlalchemy.orm import Session
-
+from sqlalchemy import JSON, ForeignKey, create_engine, String
+from sqlalchemy.orm import DeclarativeBase, mapped_column, relationship, Session
 from app.utils import random_string
 
 
@@ -26,8 +21,11 @@ class Sea(Base):
 
     __tablename__ = "sea"
 
+    # Use default=lambda: to generate a new ID at runtime
     id = mapped_column(
-        String, primary_key=True, insert_default=random_string(16, "Sea-")
+        String,
+        primary_key=True,
+        default=lambda: random_string(16, "Sea-"),
     )
     name = mapped_column(String)
     description = mapped_column(String)
@@ -39,9 +37,10 @@ class Fish(Base):
     Represents a fish entity in the database.
 
     Attributes:
+        id (str): The unique identifier of the fish.
         name (str): The name of the fish.
         description (str): A description of the fish.
-        data (str): JSON data.
+        data (dict): JSON data.
         sea_id (str): The identifier of the sea where the fish lives.
         sea (Sea): The sea where the fish lives.
     """
@@ -49,17 +48,18 @@ class Fish(Base):
     __tablename__ = "fish"
 
     id = mapped_column(
-        String, primary_key=True, insert_default=random_string(16, "Fish-")
+        String,
+        primary_key=True,
+        default=lambda: random_string(16, "Fish-"),
     )
     name = mapped_column(String)
     description = mapped_column(String)
-    data = mapped_column(JSON(True))
+    data = mapped_column(JSON)
     sea_id = mapped_column(String, ForeignKey("sea.id"))
     sea = relationship("Sea", back_populates="fish")
 
 
 # Stats
-
 engine = create_engine(os.environ.get("DATABASE_URL", "sqlite:///db.db"), echo=True)
 Base.metadata.create_all(engine, tables=[Sea.__table__, Fish.__table__])
 session = Session(engine)
