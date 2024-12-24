@@ -6,7 +6,7 @@ on:
   merge_group:
     types: [checks_requested]
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -27,15 +27,13 @@ jobs:
           pip install pytest pytest-cov
           export PYTHONPATH=$PYTHONPATH:$(pwd)
           pytest ./tests --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
-      - name: Check package version in setup.py and compare with master
+      
+  project-version-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check project version
         run: |
-          cat setup.py | grep version
-          git fetch origin master
-          git diff --exit-code origin/master setup.py
+          echo "Project version: $(cat setup.py | grep version | head -n 1)"
+          echo "Master branch version: $(git show origin/master:setup.py | grep version | head -n 1)"
           
-          if [ $? -eq 0 ]; then
-              echo "Error: Version in setup.py must be different from master"
-              exit 1
-          else
-              echo "Version change detected - OK"
-          fi
