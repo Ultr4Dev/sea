@@ -5,8 +5,9 @@ on:
   pull_request:
   merge_group:
     types: [checks_requested]
+
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -15,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
@@ -27,3 +28,32 @@ jobs:
           pip install pytest pytest-cov
           export PYTHONPATH=$PYTHONPATH:$(pwd)
           pytest ./tests --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+
+  project-version-check:
+    runs-on: ubuntu-latest
+    env:
+      branch_version: ""
+      master_version: ""
+    steps:
+      - uses: actions/checkout@v4
+      - name: get version from setup.py
+        id: get_version
+        run: |
+          version=$(grep -oP 'version=".*"' setup.py | cut -d'"' -f2)
+          echo "version=$version" >> $GITHUB_OUTPUT
+      - uses: actions/checkout@v4
+        with:
+          ref: master
+      - name: get version from master
+        id: get_master_version
+        run: |
+          master_version=$(git show origin/master:setup.py | grep -oP 'version=".*"' | cut -d'"' -f2)
+          echo "master_version=$master_version" >> $GITHUB_OUTPUT
+      - name: check version
+        run: |
+          echo "branch version: ${{ steps.get_version.outputs.version }}"
+          echo "master version: ${{ steps.get_master_version.outputs.master_version }}"
+          if [ "${{ steps.get_version.outputs.version }}" == "${{ steps.get_master_version.outputs.master_version }}" ]; then
+            echo "Version in setup.py is equal to master version"
+            exit 1
+          fi
