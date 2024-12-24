@@ -60,3 +60,14 @@ jobs:
             fi
             echo "Version in setup.py is equal to master version, but it is master branch. Ignoring"
           fi
+
+  # Try to build docker image
+  build-docker-image:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Docker image
+        run: |
+          docker build -t ${GITHUB_REPOSITORY#*/} .
+          docker run ${GITHUB_REPOSITORY#*/}
