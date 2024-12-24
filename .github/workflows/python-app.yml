@@ -3,7 +3,8 @@ name: Python package
 on:
   push:
   pull_request:
-
+  merge_group:
+    types: [checks_requested]
 jobs:
   build:
     runs-on: ubuntu-latest
