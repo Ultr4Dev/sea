@@ -32,4 +32,8 @@ jobs:
           cat setup.py | grep version
           git fetch origin master
           git diff --exit-code origin/master setup.py
-            
+          
+          if [ $? -eq 0 ]; then
+              echo "Version in setup.py is the same as master"
+              exit 1
+          fi
