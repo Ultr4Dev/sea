@@ -43,4 +43,6 @@ def delete_sea(sea_id: str) -> models.Sea:
         raise fastapi.HTTPException(status_code=404)
     db.session.delete(sea)
     db.session.commit()
-    return sea
+    return fastapi.responses.JSONResponse(
+        content={"detail": "Sea deleted successfully."}
+    )

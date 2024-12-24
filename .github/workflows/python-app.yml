@@ -22,4 +22,5 @@ jobs:
       - name: test
         run: |
           pip install pytest pytest-cov
-          pytest tests/ --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+          env PYTHONPATH=.
+          pytest ./tests --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html

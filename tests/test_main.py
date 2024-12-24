@@ -1,5 +1,6 @@
 import logging
 import fastapi
+from pydantic import BaseModel
 import pytest
 from fastapi.testclient import TestClient
 
@@ -10,12 +11,12 @@ from app.v1.routes.sea import models as sea_models
 client = TestClient(app)
 
 
-class world:
-    def __init__(self):
-        self.name = "Pacific Ocean"
-        self.description = "The largest ocean on Earth."
-        self.sea_id = None
-        self.fish_id = None
+class world(BaseModel):
+
+    name: str = "Pacific Ocean"
+    description: str = "The largest ocean on Earth."
+    sea_id: str = None
+    fish_id: str = None
 
 
 test_data = world()
@@ -81,7 +82,7 @@ def test_create_fish():
     """
     response = client.post(
         f"/v1/sea/{test_data.sea_id}/fish",
-        json={"name": "Nemo", "description": "orange"},
+        json={"name": "Nemo", "description": "orange", "data": {}},
     )
     assert response.status_code == 201
     assert response.json()["name"] == "Nemo"
@@ -97,10 +98,10 @@ def test_get_fish():
     """
     response = client.get(f"/v1/sea/{test_data.sea_id}/fish")
     assert response.status_code == 200
-    assert response.json()["fish"][0]["name"] == "Nemo"
-    assert response.json()["fish"][0]["color"] == "orange"
-    assert response.json()["fish"][0]["id"] == test_data.fish_id
-    assert response.json()["fish"][0]["sea_id"] == test_data.sea_id
+    assert response.json()[0]["name"] == "Nemo"
+    assert response.json()[0]["description"] == "orange"
+    assert response.json()[0]["id"] == test_data.fish_id
+    assert response.json()[0]["sea_id"] == test_data.sea_id
 
 
 def test_get_fish_by_id():
@@ -110,7 +111,7 @@ def test_get_fish_by_id():
     response = client.get(f"/v1/sea/{test_data.sea_id}/fish/{test_data.fish_id}")
     assert response.status_code == 200
     assert response.json()["name"] == "Nemo"
-    assert response.json()["color"] == "orange"
+    assert response.json()["description"] == "orange"
     assert response.json()["id"] == test_data.fish_id
     assert response.json()["sea_id"] == test_data.sea_id
 
@@ -121,7 +122,7 @@ def test_delete_fish():
     """
     response = client.delete(f"/v1/sea/{test_data.sea_id}/fish/{test_data.fish_id}")
     assert response.status_code == 200
-    assert response.json() == {"detail": "Sea deleted successfully."}
+    assert response.json() == {"detail": "Fish deleted successfully."}
     fish_id = None
 
 
