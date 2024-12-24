@@ -35,23 +35,22 @@ jobs:
       master_version: ""
     steps:
       - uses: actions/checkout@v4
-      - name: get version from setup.py
+      - name: Get version from setup.py
         id: get_version
         run: |
-          echo "::set-output name=version::$(grep -oP 'version=".*"' setup.py | cut -d'"' -f2)"
+          echo "version=$(grep -oP 'version=\".*\"' setup.py | cut -d'\"' -f2)" >> $GITHUB_OUTPUT
       - uses: actions/checkout@v4
         with:
           ref: master
-      - name: get version from master
+      - name: Get version from master
         id: get_master_version
         run: |
-          echo "::set-output name=master_version::$(git show origin/master:setup.py | grep -oP 'version=".*"' | cut -d'"' -f2)"
-      - name: check version
+          echo "master_version=$(git show origin/master:setup.py | grep -oP 'version=\".*\"' | cut -d'\"' -f2)" >> $GITHUB_OUTPUT
+      - name: Check version
         run: |
-          echo "branch version: ${{ steps.get_version.outputs.version }}"
-          echo "master version: ${{ steps.get_master_version.outputs.master_version }}"
-          if [ "${{ steps.get_version.outputs.version }}" != "${{ steps.get_master_version.outputs.master_version }}" ]; then
-            echo "Version in setup.py is not equal to master version"
+          echo "Branch version: ${{ steps.get_version.outputs.version }}"
+          echo "Master version: ${{ steps.get_master_version.outputs.master_version }}"
+          if [ "${{ steps.get_version.outputs.version }}" == "${{ steps.get_master_version.outputs.master_version }}" ]; then
+            echo "Version in setup.py is equal to master version"
             exit 1
           fi
-        
