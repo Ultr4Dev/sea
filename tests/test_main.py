@@ -1,13 +1,13 @@
+import logging
 import fastapi
 import pytest
 from fastapi.testclient import TestClient
 
 from app.v1.main import app
-from app.v1.routes import fish, sea
+from app.v1.routes.fish import models as fish_models
+from app.v1.routes.sea import models as sea_models
 
 client = TestClient(app)
-
-world = world()
 
 
 class world:
@@ -18,8 +18,12 @@ class world:
         self.fish_id = None
 
 
+test_data = world()
+
+
 def test_default_redirect():
     response = client.get("/")
+    logging.info(response)
     assert response.status_code == 200
     assert response.url.path == "/docs"
 
@@ -41,33 +45,34 @@ def test_create_sea():
     """
     Test that the API creates a sea
     """
-    response = client.post("/v1/sea", json={"name": name, "description": description})
+    response = client.post(
+        "/v1/sea", json={"name": test_data.name, "description": test_data.description}
+    )
     assert response.status_code == 201
-    assert response.json()["name"] == name
-    assert response.json()["description"] == description
+    assert response.json()["name"] == test_data.name
+    assert response.json()["description"] == test_data.description
     assert response.json()["id"].startswith("Sea-")
-    sea_id = response.json()["id"]
+    test_data.sea_id = response.json()["id"]
+    assert sea_models.Sea(**response.json())
 
 
 def test_get_sea():
     """
     Test that the API returns the correct sea
     """
-    response = client.get(f"/v1/sea/{sea_id}")
+    response = client.get(f"/v1/sea/{test_data.sea_id}")
     assert response.status_code == 200
-    assert response.json()["name"] == name
-    assert response.json()["description"] == description
-    assert response.json()["id"] == sea_id
+    assert response.json()["name"] == test_data.name
+    assert response.json()["description"] == test_data.description
+    assert response.json()["id"] == test_data.sea_id
 
 
 def test_get_fish_returns_404():
     """
     Test that the API returns 404 when there are no fish in the sea
     """
-    response = client.get(f"/v1/sea/{sea_id}/fish")
-    assert response.status_code == 204
-    assert response.json()["fish"] == []
-    assert response.json()["sea_id"] == sea_id
+    response = client.get(f"/v1/sea/{test_data.sea_id}/fish")
+    assert response.status_code == 404
 
 
 def test_create_fish():
@@ -75,45 +80,46 @@ def test_create_fish():
     Test that the API creates a fish
     """
     response = client.post(
-        f"/v1/sea/{sea_id}/fish", json={"name": "Nemo", "color": "orange"}
+        f"/v1/sea/{test_data.sea_id}/fish",
+        json={"name": "Nemo", "description": "orange"},
     )
     assert response.status_code == 201
     assert response.json()["name"] == "Nemo"
-    assert response.json()["color"] == "orange"
+    assert response.json()["description"] == "orange"
     assert response.json()["id"].startswith("Fish-")
-    fish_id = response.json()["id"]
-    assert response.json()["sea_id"] == sea_id
+    test_data.fish_id = response.json()["id"]
+    assert response.json()["sea_id"] == test_data.sea_id
 
 
 def test_get_fish():
     """
     Test that the API returns the correct fish
     """
-    response = client.get(f"/v1/sea/{sea_id}/fish")
+    response = client.get(f"/v1/sea/{test_data.sea_id}/fish")
     assert response.status_code == 200
     assert response.json()["fish"][0]["name"] == "Nemo"
     assert response.json()["fish"][0]["color"] == "orange"
-    assert response.json()["fish"][0]["id"] == fish_id
-    assert response.json()["fish"][0]["sea_id"] == sea_id
+    assert response.json()["fish"][0]["id"] == test_data.fish_id
+    assert response.json()["fish"][0]["sea_id"] == test_data.sea_id
 
 
 def test_get_fish_by_id():
     """
     Test that the API returns the correct fish by id
     """
-    response = client.get(f"/v1/sea/{sea_id}/fish/{fish_id}")
+    response = client.get(f"/v1/sea/{test_data.sea_id}/fish/{test_data.fish_id}")
     assert response.status_code == 200
     assert response.json()["name"] == "Nemo"
     assert response.json()["color"] == "orange"
-    assert response.json()["id"] == fish_id
-    assert response.json()["sea_id"] == sea_id
+    assert response.json()["id"] == test_data.fish_id
+    assert response.json()["sea_id"] == test_data.sea_id
 
 
 def test_delete_fish():
     """
     Test that the API deletes a fish
     """
-    response = client.delete(f"/v1/sea/{sea_id}/fish/{fish_id}")
+    response = client.delete(f"/v1/sea/{test_data.sea_id}/fish/{test_data.fish_id}")
     assert response.status_code == 200
     assert response.json() == {"detail": "Sea deleted successfully."}
     fish_id = None
@@ -123,8 +129,8 @@ def test_delete_sea():
     """
     Test that the API deletes a sea
     """
-    response = client.delete(f"/v1/sea/{sea_id}")
+    response = client.delete(f"/v1/sea/{test_data.sea_id}")
     assert response.status_code == 200
     assert response.json() == {"detail": "Sea deleted successfully."}
 
-    sea_id = None
+    test_data.sea_id = None
