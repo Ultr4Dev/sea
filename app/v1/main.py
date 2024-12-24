@@ -45,7 +45,7 @@ def read_root() -> fastapi.responses.RedirectResponse:
 @app.get("/health", tags=["default"])
 def health():
     if exceptionhandler.operational:
-        return fastapi.Response(status_code=200)
+        return fastapi.responses.JSONResponse(status_code=200, content={"status": "ok"})
     return fastapi.Response(status_code=503)
 
 
