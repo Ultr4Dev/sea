@@ -27,10 +27,9 @@ jobs:
           pip install pytest pytest-cov
           export PYTHONPATH=$PYTHONPATH:$(pwd)
           pytest ./tests --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
-      - name: Check package version
+      - name: Check package version in setup.py and compare with master
         run: |
-            python -c "import com; print(com.__version__)"
-            if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/master)" ]; then
-              echo "The version is not the same as the one on the master branch"
-              exit 1
-            fi
+          cat setup.py | grep version
+          git fetch origin master
+          git diff --exit-code origin/master setup.py
+            
