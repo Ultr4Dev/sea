@@ -21,7 +21,7 @@ The point was to create a simple web server that can store and serve json data f
 
 ### Create a Sea
 
-To create a new sea, send a POST request to `/V1/sea/` with the following JSON body:
+To create a new sea, send a POST request to `/v1/sea/` with the following JSON body:
 
 ```json
 {
@@ -39,10 +39,10 @@ Response:
 
 ### Get a Sea
 
-To retrieve a sea, send a GET request to `/V1/sea/{sea_id}`:
+To retrieve a sea, send a GET request to `/v1/sea/{sea_id}`:
 
 ```http
-GET /V1/sea/Sea-1234567890abcdef
+GET /v1/sea/Sea-1234567890abcdef
 ```
 
 Response:
@@ -54,10 +54,10 @@ Response:
 
 ### Delete a Sea
 
-To delete a sea, send a DELETE request to `/V1/sea/{sea_id}`:
+To delete a sea, send a DELETE request to `/v1/sea/{sea_id}`:
 
 ```http
-DELETE /V1/sea/Sea-1234567890abcdef
+DELETE /v1/sea/Sea-1234567890abcdef
 ```
 
 Response:
@@ -73,7 +73,7 @@ Response:
 
 ### Create a Fish
 
-To create a new fish, send a POST request to `/V1/sea/{sea_id}/fish/` with the following JSON body:
+To create a new fish, send a POST request to `/v1/sea/{sea_id}/fish/` with the following JSON body:
 
 ```json
 {
@@ -95,10 +95,10 @@ Response:
 
 ### Get Fishes
 
-To retrieve all fishes in a sea, send a GET request to `/V1/sea/{sea_id}/fish/`:
+To retrieve all fishes in a sea, send a GET request to `/v1/sea/{sea_id}/fish/`:
 
 ```http
-GET /V1/sea/Sea-1234567890abcdef/fish/
+GET /v1/sea/Sea-1234567890abcdef/fish/
 ```
 
 Response:
@@ -110,10 +110,10 @@ Response:
 
 ### Get a Fish
 
-To retrieve a specific fish, send a GET request to `/V1/sea/{sea_id}/fish/{fish_id}`:
+To retrieve a specific fish, send a GET request to `/v1/sea/{sea_id}/fish/{fish_id}`:
 
 ```http
-GET /V1/sea/Sea-1234567890abcdef/fish/Fish-1234567890abcdef
+GET /v1/sea/Sea-1234567890abcdef/fish/Fish-1234567890abcdef
 ```
 
 Response:
@@ -125,10 +125,10 @@ Response:
 
 ### Delete a Fish
 
-To delete a specific fish, send a DELETE request to `/V1/sea/{sea_id}/fish/{fish_id}`:
+To delete a specific fish, send a DELETE request to `/v1/sea/{sea_id}/fish/{fish_id}`:
 
 ```http
-DELETE /V1/sea/Sea-1234567890abcdef/fish/Fish-1234567890abcdef
+DELETE /v1/sea/Sea-1234567890abcdef/fish/Fish-1234567890abcdef
 ```
 
 Response:

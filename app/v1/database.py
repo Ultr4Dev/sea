@@ -29,7 +29,7 @@ class Sea(Base):
     )
     name = mapped_column(String)
     description = mapped_column(String)
-    fish = relationship("Fish", back_populates="sea_v1")
+    fish = relationship("Fish", back_populates="sea")
 
 
 class Fish(Base):
@@ -55,8 +55,8 @@ class Fish(Base):
     name = mapped_column(String)
     description = mapped_column(String)
     data = mapped_column(JSON)
-    sea_id = mapped_column(String, ForeignKey("sea_v1.id"))
-    sea = relationship("Sea", back_populates="fish_v1")
+    sea_id = mapped_column(String, ForeignKey("sea_v1.id"), nullable=False)
+    sea = relationship("Sea", back_populates="fish")
 
 
 # Stats

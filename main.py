@@ -1,5 +1,7 @@
+import logging
 from app.v1.main import app
 
+logging.basicConfig(level=logging.DEBUG)
 if __name__ == "__main__":
     import uvicorn
 
