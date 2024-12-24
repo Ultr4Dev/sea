@@ -30,10 +30,25 @@ jobs:
 
   project-version-check:
     runs-on: ubuntu-latest
+    env:
+      branch_version: ""
+      master_version: ""
     steps:
       - uses: actions/checkout@v4
-      - name: Check project version
+      - name: get version from setup.py
+        id: get_version
         run: |
-          # remove 'version=' and quotes from the version string
-          echo "Project version: $(cat setup.py | grep version | head -n 1 | sed -E 's/version=//g' | tr -d \"'\")"
-          echo "Master branch version: $(git show origin/master:setup.py | grep version | head -n 1 | sed -E 's/version=//g' | tr -d \"'\")"
+          echo "::set-output name=version::$(grep -oP 'version=".*"' setup.py | cut -d'"' -f2)"
+      - name: get version from master
+        id: get_master_version
+        run: |
+          echo "::set-output name=master_version::$(git show origin/master:setup.py | grep -oP 'version=".*"' | cut -d'"' -f2)"
+      - name: check version
+        run: |
+          echo "branch version: ${{ steps.get_version.outputs.version }}"
+          echo "master version: ${{ steps.get_master_version.outputs.master_version }}"
+          if [ "${{ steps.get_version.outputs.version }}" != "${{ steps.get_master_version.outputs.master_version }}" ]; then
+            echo "Version in setup.py is not equal to master version"
+            exit 1
+          fi
+        
