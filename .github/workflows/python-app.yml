@@ -39,6 +39,9 @@ jobs:
         id: get_version
         run: |
           echo "::set-output name=version::$(grep -oP 'version=".*"' setup.py | cut -d'"' -f2)"
+      - uses: actions/checkout@v4
+        with:
+          ref: master
       - name: get version from master
         id: get_master_version
         run: |
