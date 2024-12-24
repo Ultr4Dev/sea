@@ -54,6 +54,10 @@ jobs:
           echo "branch version: ${{ steps.get_version.outputs.version }}"
           echo "master version: ${{ steps.get_master_version.outputs.master_version }}"
           if [ "${{ steps.get_version.outputs.version }}" == "${{ steps.get_master_version.outputs.master_version }}" ]; then
+            if [ "${{ github.head_ref || github.ref_name }}" == "master" ]; then
+              echo "This is master branch ignoring version check"
+              exit 0
+            fi
             echo "Version in setup.py is equal to master version"
             exit 1
           fi
