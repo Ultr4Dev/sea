@@ -1,5 +1,7 @@
 # Sea is a simple, lightweight, and fast web server for storing and serving json data.
 
+> Available (here)[https://sea.ultr4.io/]
+
 ## Explanation of Fish and Sea
 
 ### Sea
