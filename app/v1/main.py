@@ -49,12 +49,6 @@ def health():
     return fastapi.Response(status_code=503)
 
 
-@app.get("/simulate/down")
-def simulate_down():
-    exceptionhandler.operational = False
-    return fastapi.Response(status_code=200)
-
-
 if __name__ == "__main__":
     import uvicorn
 
